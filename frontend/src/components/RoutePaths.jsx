@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Dashboard from "./landing-page/Dashboard";
 import CreateUser from "./user-authentication/CreateUser";
 import LogIn from "./user-authentication/LogIn";
@@ -8,7 +8,7 @@ import EnergyUsage from "./user-stats/EnergyUsage";
 
 export default () => {
     return (
-        <BrowserRouter>
+        
                 <Routes>
                     <Route path="/" element={<LogIn />} />
                     <Route path="/create-user" element={<CreateUser />} />
@@ -17,6 +17,6 @@ export default () => {
                     <Route path="/billing" element={<Billing />} />
                     <Route path="/energy-usage" element={<EnergyUsage />} />
                 </Routes>
-            </BrowserRouter>
+            
     )
 }
