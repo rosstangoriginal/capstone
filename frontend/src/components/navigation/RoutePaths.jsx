@@ -6,7 +6,7 @@ import SetNewPassword from "../user-authentication/SetNewPassword";
 import Billing from "../user-stats/Billing";
 import EnergyUsage from "../user-stats/EnergyUsage";
 
-export default () => {
+const RoutePaths = () => {
   return (
         <Routes>
           <Route path="/" element={<LogIn />} />
@@ -32,3 +32,5 @@ export default () => {
         </Routes>
   );
 };
+
+export default RoutePaths;

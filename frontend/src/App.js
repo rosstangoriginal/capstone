@@ -18,7 +18,7 @@ function App() {
         <div className="App">
             <Navbar />
             <h1>Blockchain Energy Project</h1>
-            <LineChart chartData={userData}/>
+            {/* <LineChart chartData={userData}/> */}
             <RoutePaths />
         </div>
     );
