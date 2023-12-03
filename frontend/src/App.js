@@ -1,6 +1,6 @@
 import "./App.css";
-import Navbar from "./Navbar";
-import RoutePaths from "./components/RoutePaths"
+import Navbar from "./components/navigation/Navbar";
+import RoutePaths from "./components/navigation/RoutePaths"
 
 function App() {
     return (
