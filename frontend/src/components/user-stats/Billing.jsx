@@ -1,9 +1,12 @@
-const Billing = (props) => {
+const Billing = () => {
+  // const transactionStatus = localStorage.getItem('transactionStatus');
+
   return (
     <div>
       <h1>Billing</h1>
+      <p>Transaction Successful!</p>
       <p>
-        {props.firstName}, your bill for {localStorage.getItem('currentEnergyUsed')} kWh was ${localStorage.getItem('currentBillPaid')} has been paid.  Thank you!
+        {localStorage.getItem('etherPaid')} ether has been paid.  Thank you!
       </p>
     </div>
   );
