@@ -2,7 +2,7 @@ import "./App.css";
 import Navbar from "./components/navigation/Navbar";
 import RoutePaths from "./components/navigation/RoutePaths";
 import {useState} from 'react';
-import {UserData} from "./UserData";
+import {UserData} from "./components/utils/UserData";
 import LineChart from "./components/charts/LineChart";
 
 function App() { 
