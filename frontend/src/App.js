@@ -1,6 +1,4 @@
 import "./App.css";
-import React, { useState } from 'react';
-import PayBill from './components/user-stats/PayBill';
 import Navbar from './components/navigation/Navbar';
 import RoutePaths from "./components/navigation/RoutePaths";
 

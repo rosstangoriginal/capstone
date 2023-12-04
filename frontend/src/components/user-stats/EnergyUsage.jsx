@@ -11,6 +11,7 @@ import "bootstrap/dist/css/bootstrap.css";
 Chart.register(CategoryScale);
 
 const EnergyUsage = () => {
+    const navigate = useNavigate();
     const [transactionStatus, setTransactionStatus] = useState(null);
 
     const handleSubmit = async () => {
@@ -18,7 +19,7 @@ const EnergyUsage = () => {
             const response = await fetch(
                 "http://localhost:3000/perform_transaction",
                 {
-                    method: "POST",
+                    method: 'POST',
                     headers: {
                         "Content-Type": "application/json",
                     },
@@ -56,7 +57,7 @@ const EnergyUsage = () => {
     })
 
     const [amount, setAmount] = useState("");
-    const navigate = useNavigate();
+    
 
     // const handleSubmit = (e) => {
         // e.preventDefault();
@@ -97,7 +98,9 @@ const EnergyUsage = () => {
     return (
         <div>
             <h1>Energy usage</h1>
-            <form onSubmit={handleSubmit}>
+            <h4>Pay energy bill of 0.05 ether</h4>
+            
+            {/* <form onSubmit={handleSubmit}>
                 <label>Enter the amount of ether you wish to pay</label>
                 <input
                     type="text"
@@ -105,7 +108,7 @@ const EnergyUsage = () => {
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                 />
-                {/* <div className="mt-5 m-auto w-50">
+                <div className="mt-5 m-auto w-50">
                     <Select 
                         // options={monthOptions} 
                         value={amount}
@@ -115,13 +118,14 @@ const EnergyUsage = () => {
                         <option value={65}>February</option> 
                         <option value={55}>March</option>     
                     </Select>
-                </div> */}
+                </div> 
                 
-                <input
-                    type="submit"
-                    value="Perform Transaction"
-                />
+                
+                
             </form>
+                */}
+            <button onClick={handleSubmit}>Perform Transaction</button>
+            {transactionStatus && <p>{transactionStatus}</p>}
             <div style={{width: 700, display: 'flex', justifyContent: "center" }}>
                 <LineChart chartData={chartData}/>
             </div>
