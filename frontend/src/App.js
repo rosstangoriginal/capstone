@@ -1,5 +1,8 @@
+import "./App.css";
 import React, { useState } from 'react';
 import PayBill from './components/user-stats/PayBill';
+import Navbar from './components/navigation/Navbar';
+import RoutePaths from "./components/navigation/RoutePaths";
 
 function App() {
 //   const [transactionStatus, setTransactionStatus] = useState(null);
@@ -28,7 +31,11 @@ function App() {
 //   };
 
   return (
-    <PayBill />
+    <div className='App'>
+        <Navbar />
+        {/* <PayBill /> */}
+        <RoutePaths />
+    </div>
     // <div>
     //   <h1>SimpleTransfer App</h1>
     //   <h3>Press button to pay energy bill of 0.05 ether</h3>
