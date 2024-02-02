@@ -13,6 +13,7 @@ export default function Navbar() {
             <ul>
                 <CustomLink to="/energy-usage">Energy Usage</CustomLink>
                 <CustomLink to="/billing">Billing</CustomLink>
+                <CustomLink to="/profile">Profile</CustomLink>
             </ul>
         </nav>
     );

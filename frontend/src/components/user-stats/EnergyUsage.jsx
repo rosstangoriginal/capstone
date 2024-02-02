@@ -98,7 +98,7 @@ const EnergyUsage = () => {
     return (
         <div>
             <h1>Energy usage</h1>
-            <h4>Pay energy bill of 0.05 ether</h4>
+            {/* <h4>Pay energy bill of 0.05 ether</h4> */}
             
             {/* <form onSubmit={handleSubmit}>
                 <label>Enter the amount of ether you wish to pay</label>
@@ -124,9 +124,9 @@ const EnergyUsage = () => {
                 
             </form>
                 */}
-            <button onClick={handleSubmit}>Perform Transaction</button>
-            {transactionStatus && <p>{transactionStatus}</p>}
-            <div style={{width: 700, display: 'flex', justifyContent: "center" }}>
+            {/* <button onClick={handleSubmit}>Perform Transaction</button> */}
+            {/* {transactionStatus && <p>{transactionStatus}</p>} */}
+            <div style={{width: 700, display: 'flex', justifyContent: "center", margin:"auto" }}>
                 <LineChart chartData={chartData}/>
             </div>
         </div>
