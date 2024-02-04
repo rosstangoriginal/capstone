@@ -5,7 +5,6 @@ import LineChart from '../charts/LineChart';
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Select from "react-select";
 import "bootstrap/dist/css/bootstrap.css";
 
 Chart.register(CategoryScale);
@@ -97,7 +96,10 @@ const EnergyUsage = () => {
 
     return (
         <div>
-            <h1>Energy usage</h1>
+            <div class="header">
+                <h1>Energy usage</h1>
+            </div>
+            
             {/* <h4>Pay energy bill of 0.05 ether</h4> */}
             
             {/* <form onSubmit={handleSubmit}>
@@ -126,8 +128,8 @@ const EnergyUsage = () => {
                 */}
             {/* <button onClick={handleSubmit}>Perform Transaction</button> */}
             {/* {transactionStatus && <p>{transactionStatus}</p>} */}
-            <div style={{width: 700, display: 'flex', justifyContent: "center", margin:"auto" }}>
-                <LineChart chartData={chartData}/>
+            <div style={{width: 1000, height: 500, display: 'flex', justifyContent: "center", margin:"auto" }}>
+                <LineChart name="usage-chart" chartData={chartData}/>
             </div>
         </div>
     );

@@ -3,7 +3,9 @@ const Billing = () => {
 
   return (
     <div>
-      <h1>Billing</h1>
+      <div class="header billing-header">
+        <h1>Billing</h1>
+      </div>
       <div class="panel-body">
         <div class="row">
           <div class="col-sm-8">

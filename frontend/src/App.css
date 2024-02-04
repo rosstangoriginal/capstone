@@ -43,6 +43,29 @@
   font-weight: 500 !important;
 }
 
+.chart-container {
+  width: 700px;
+  padding-top: 10px;
+}
+
+.form-element {
+  padding-top: 10px;
+}
+
+.header {
+  color: #3b8c82;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.login-form {
+  color: #3b8c82;
+  font-size: larger;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+}
+
 .nav {
   background-color: #3b8c82;
   color: beige;
@@ -80,15 +103,20 @@
   background-color: #282c34;
 }
 
+.panel-heading {
+  background-color: #3b8c82;
+  color: beige;
+}
+
+.panel-dashboard-btn {
+  padding-top: 40px;
+}
+
 .panel-title {
   background-color: #3b8c82;
   color: beige;
   font-size: larger;
   font-weight: 300;
-}
-
-.profile-header {
-  color: #3b8c82;
 }
 
 .site-title {
@@ -98,3 +126,7 @@
 tr.spaceUnder>td {
   padding-bottom: 1em;
 }
+
+/* .usage-chart {
+  width: 700px;
+} */

@@ -11,7 +11,10 @@ function LineChart({chartData}) {
                     plugins: {
                         title: {
                             display: true,
-                            text: "Energy Usage Chart"
+                            text: "Monthy Energy Usage Chart by kWh",
+                            font: {
+                                size: 24
+                            }
                         },
                         legend: {
                             display: false

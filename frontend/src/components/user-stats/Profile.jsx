@@ -5,8 +5,8 @@ const Profile = () => {
         <Fragment>
             <div>
                 <div class="table-responsive">
-                    <div class="profile-header">
-                        <h2>This is your acount profile Darth</h2>
+                    <div class="header profile-header">
+                        <h1>This is your acount profile Darth</h1>
                     </div>
                     <div class="panel-title" align="left">
                         <strong>My Account Profile </strong>

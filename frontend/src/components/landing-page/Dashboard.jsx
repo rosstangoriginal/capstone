@@ -4,6 +4,9 @@ const Dashboard = () => {
     return (
         <Fragment>
             <div>
+                <div class="header">
+                    <h1>Welcome Darth</h1>
+                </div>
                 <div class="table-responsive">
                     <div class="panel-title" align="left">
                     You are viewing account # 
@@ -54,13 +57,14 @@ const Dashboard = () => {
                         </table>
                     </div>
                 </div>
-                <div class="panel-body center-text">
-                    <a id="viewEnergyUsage" type="button" class="btn btn-info" href="http://localhost:3000/energy-usage">
-                        View Energy Usage
+                <div class="panel-body center-text panel-dashboard-btn">
+                    <a id="viewEnergyUsage" type="button" class="btn btn-info btn-dashboard" href="http://localhost:3000/energy-usage">
+                    View Energy Usage
                     </a>
-                    <a id="viewBilling" type="button" class="btn btn-info" href="http://localhost:3000/billing">
-                        View Current Bill
-                    </a>
+                
+                    <a id="viewBilling" type="button" class="btn btn-info btn-dashboard" href="http://localhost:3000/billing">
+                    View Current Bill
+                    </a>                    
                 </div>
             </div>
         </Fragment>

@@ -3,17 +3,30 @@ import { Fragment } from "react";
 const Login = () => {
     return (
         <Fragment>
-            <h1>Please enter your login info</h1>
-            <form>
-                <label>
+            <div class="header">
+                <h3>Please enter your login info</h3>
+            </div>
+            
+            <form class="login-form">
+                <div class="form-element">
+                   <label>
                     Email/Username:
-                    <input type="text" name="email" />
-                </label>
-                <label>
+                    <div class="form-element">
+                        <input type="text" name="email" />
+                    </div>
+                </label> 
+                </div>
+                <div class="form-element">
+                    <label>
                     Password:
-                    <input type="text" name="password" />
+                    <div class="form-element">
+                        <input type="password" name="password" />
+                    </div>
                 </label>
-                <input type="submit" value="Submit" />
+                </div>
+                <div class="form-element">
+                  <input class="btn-info" type="submit" value="Submit" />  
+                </div>
             </form>
         </Fragment>
     )
