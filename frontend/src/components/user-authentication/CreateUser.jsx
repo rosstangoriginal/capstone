@@ -57,11 +57,11 @@ const CreateUser = (props) => {
     // Create a user account with the given info
     const createAccount = () => {
         const data = {
-            first_name: this.firstName,
-            last_name: this.lastName,
-            email: this.email,
-            password: getHashedPassword(this.password),
-            account_num: Math.floor(Math.random() * 100000)
+            first_name: firstName,
+            last_name: lastName,
+            email: email,
+            password: getHashedPassword(password),
+            account_number: Math.floor(Math.random() * 100000) 
         }
 
         // *** url is subject to change when we know where the backend is hosted and on what port
@@ -75,10 +75,13 @@ const CreateUser = (props) => {
             body: JSON.stringify(data),
         }
         fetch(url, options)
-            .then((response) => {
-                this.posts = response.data
-                this.errorData = null
-                this.fieldCheck = null
+            .then(response => response.json())
+            .then(response => {
+                if ('Account created successfully' === response.message) {
+                    window.location = "/"
+                } else {
+                    window.alert("Profile could not be created")
+                }
             })
             .catch(error => {
                 if (error.response) {

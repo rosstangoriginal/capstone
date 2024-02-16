@@ -56,8 +56,10 @@ def get_users():
 
 @blueprint.route('/login', methods=['POST'])
 def login():
-    email = request.args.get('Email')
-    password = request.args.get('Password')
+    data = request.get_json()
+
+    email = data.get('email')
+    password = data.get('password')
 
     if not email or not password:
         return jsonify({"message": "Email and password are required."}), 400
