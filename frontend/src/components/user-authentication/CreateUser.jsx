@@ -1,55 +1,34 @@
-// import { Fragment } from "react";
 import React, {useState} from "react";
-import {useNavigate} from "react-router-dom"
-
-// useEffect(() => {
-//     // Fetch the user email and token from local storage
-//     const user = JSON.parse(localStorage.getItem("user"))
-  
-//     // If the token/email does not exist, mark the user as logged out
-//     if (!user || !user.token) {
-//       setLoggedIn(false)
-//       return
-//     }
-  
-//     // If the token exists, verify it with the auth server to see if it is valid
-//     fetch("http://localhost:3080/verify", {
-//             method: "POST",
-//             headers: {
-//                 'jwt-token': user.token
-//               }
-//         })
-//         .then(r => r.json())
-//         .then(r => {
-//             setLoggedIn('success' === r.message)
-//             setEmail(user.email || "")
-//         })
-//   }, [])
+import { getHashedPassword } from "./hash"
 
 const CreateUser = (props) => {
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const [accountNum, setAccountNum] = useState("")
     const [firstNameError, setFirstNameError] = useState("")
     const [lastNameError, setLastNameError] = useState("")
     const [emailError, setEmailError] = useState("")
     const [passwordError, setPasswordError] = useState("")
-    const [accountNumError, setAccountNumError] = useState("")
 
-    const navigate = useNavigate();
-
-    // change this for the submission of a new user
     const onButtonClick = () => {
         setFirstNameError("")
         setLastNameError("")
         setEmailError("")
         setPasswordError("")
-        setAccountNumError("")
+
+        if("" === firstName) {
+            setFirstNameError("Required: first name")
+            return
+        }
+
+        if("" === lastName) {
+            setLastNameError("Required: last name")
+            return
+        }
 
         if("" === email) {
-            setEmailError("Please enter your email")
+            setEmailError("Required: email")
             return
         }
 
@@ -59,7 +38,7 @@ const CreateUser = (props) => {
         }
 
         if ("" === password) {
-            setPasswordError("Please enter a password")
+            setPasswordError("Required: password")
             return
         }
 
@@ -69,62 +48,45 @@ const CreateUser = (props) => {
         }
 
         createAccount()
-        // Check if email has an account associated with it
-        //  checkAccountExists(accountExists => {
-        //     // If yes, log in 
-        //     if (!accountExists)
-        //         createAccount()
-        //     else
-        //     // Else, ask user if they want to create a new account and if yes, then log in
-        //         setEmailError("User with this email address already exists")
-        // })
     }
 
     const onButtonClickGoLogin = () => {
         window.location = "/"
     }
 
-    // *** this functionality has not been tested yet
-    // Call the server API to check if the given email ID already exists
-    const checkAccountExists = (callback) => {
-        fetch("http://localhost:3080/check-account", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-              },
-            body: JSON.stringify({email})
-        })
-        .then(r => r.json())
-        .then(r => {
-            callback(r?.userExists)
-        })
-    }
-
-    // Log in a user using email and password
-    // const logIn = () => {
-    //     fetch("http://localhost:3080/auth", {
-    //         method: "POST",
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //           },
-    //         body: JSON.stringify({email, password})
-    //     })
-    //     .then(r => r.json())
-    //     .then(r => {
-    //         if ('success' === r.message) {
-    //             localStorage.setItem("user", JSON.stringify({email, token: r.token}))
-    //             props.setLoggedIn(true)
-    //             props.setEmail(email)
-    //             navigate("/dashboard")
-    //         } else {
-    //             window.alert("Wrong email or password")
-    //         }
-    //     })
-    // }
-
     // Create a user account with the given info
     const createAccount = () => {
-        // fill with code
+        const data = {
+            first_name: this.firstName,
+            last_name: this.lastName,
+            email: this.email,
+            password: getHashedPassword(this.password),
+            account_num: Math.floor(Math.random() * 100000)
+        }
+
+        // *** url is subject to change when we know where the backend is hosted and on what port
+        const url = "http://127.0.0.1:5000/create_account_api/create_account"
+        const options = {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json;charset=UTF-8",
+            },
+            body: JSON.stringify(data),
+        }
+        fetch(url, options)
+            .then((response) => {
+                this.posts = response.data
+                this.errorData = null
+                this.fieldCheck = null
+            })
+            .catch(error => {
+                if (error.response) {
+                    this.posts = null
+                    this.errorData = error.response.data
+                    this.fieldCheck = null
+                }
+            })
     }
 
     return (
@@ -173,15 +135,6 @@ const CreateUser = (props) => {
             <br />
             <div className={"inputContainer"}>
                 <input
-                    value={accountNum}
-                    placeholder="Account Number"
-                    onChange={ev => setAccountNum(ev.target.value)}
-                    className={"inputBox"} />
-                <label className="errorLabel">{accountNumError}</label>
-            </div>
-            <br />
-            <div className={"inputContainer"}>
-                <input
                     className={"inputButton"}
                     type="button"
                     onClick={onButtonClick}
@@ -195,7 +148,6 @@ const CreateUser = (props) => {
                     value={"Already a User? Login"}
                 />
             </div>
-         
         </div>
     )
 }

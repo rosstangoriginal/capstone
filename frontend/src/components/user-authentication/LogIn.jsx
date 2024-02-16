@@ -1,38 +1,11 @@
-// import { Fragment } from "react";
 import React, {useState} from "react";
-import {useNavigate} from "react-router-dom"
-
-// useEffect(() => {
-//     // Fetch the user email and token from local storage
-//     const user = JSON.parse(localStorage.getItem("user"))
-  
-//     // If the token/email does not exist, mark the user as logged out
-//     if (!user || !user.token) {
-//       setLoggedIn(false)
-//       return
-//     }
-  
-//     // If the token exists, verify it with the auth server to see if it is valid
-//     fetch("http://localhost:3080/verify", {
-//             method: "POST",
-//             headers: {
-//                 'jwt-token': user.token
-//               }
-//         })
-//         .then(r => r.json())
-//         .then(r => {
-//             setLoggedIn('success' === r.message)
-//             setEmail(user.email || "")
-//         })
-//   }, [])
+import { getHashedPassword } from "./hash";
 
 const Login = (props) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [emailError, setEmailError] = useState("")
     const [passwordError, setPasswordError] = useState("")
-
-    const navigate = useNavigate();
 
     const onButtonClick = () => {
         setEmailError("")
@@ -58,54 +31,34 @@ const Login = (props) => {
             return
         }
 
-         // Check if email has an account associated with it
-         checkAccountExists(accountExists => {
-            // If yes, log in 
-            if (accountExists)
-                logIn()
-            else
-            // Else, ask user if they want to create a new account and if yes, then log in
-                if (window.confirm("An account does not exist with this email address: " + email + ". Do you want to create a new account?")) {
-                    logIn()
-                }
-        })
+        logIn()
     }
 
     const onButtonClickCreateUser = () => {
         window.location = "/create-user"
     }
 
-    // Call the server API to check if the given email ID already exists
-    const checkAccountExists = (callback) => {
-        fetch("http://localhost:3080/check-account", {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json'
-              },
-            body: JSON.stringify({email})
-        })
-        .then(r => r.json())
-        .then(r => {
-            callback(r?.userExists)
-        })
-    }
-
     // Log in a user using email and password
     const logIn = () => {
-        fetch("http://localhost:3080/auth", {
+        const data = {
+            email: this.email,
+            password: getHashedPassword(this.password)
+        }
+
+        // *** url is subject to change when we know where the backend is hosted and on what port
+        const url = "http://127.0.0.1:5000/login_endpoints/login"
+       
+        fetch(url, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
               },
-            body: JSON.stringify({email, password})
+            body: JSON.stringify(data)
         })
         .then(r => r.json())
         .then(r => {
             if ('success' === r.message) {
-                localStorage.setItem("user", JSON.stringify({email, token: r.token}))
-                props.setLoggedIn(true)
-                props.setEmail(email)
-                navigate("/dashboard")
+                window.location = "/dashboard"
             } else {
                 window.alert("Wrong email or password")
             }
@@ -153,8 +106,6 @@ const Login = (props) => {
                     value={"Create User"}
                 />
             </div>
-
-            
         </div>
     )
 }
