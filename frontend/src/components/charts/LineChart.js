@@ -1,9 +1,29 @@
 import React from 'react';
 import {Line} from 'react-chartjs-2';
-import {Chart as ChartJS} from 'chart.js/auto';
 
 function LineChart({chartData}) {
-    return <Line data={chartData}/>;
+    return (
+        <div className='chart-container'>
+            {/* <h2 style={{textAlign: "center"}}>Line Chart</h2> */}
+            <Line 
+                data={chartData}
+                options={{
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: "Monthy Energy Usage Chart by kWh",
+                            font: {
+                                size: 24
+                            }
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
+                }}
+            />
+        </div>
+    );
 }
 
 export default LineChart;

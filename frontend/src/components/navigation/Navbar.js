@@ -11,8 +11,10 @@ export default function Navbar() {
                 Blockchain Energy Project
             </Link>
             <ul>
+                <CustomLink to="/dashboard">Home</CustomLink>
                 <CustomLink to="/energy-usage">Energy Usage</CustomLink>
                 <CustomLink to="/billing">Billing</CustomLink>
+                <CustomLink to="/profile">Profile</CustomLink>
             </ul>
         </nav>
     );
