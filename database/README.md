@@ -8,3 +8,10 @@
     pip install mysql-connector-python or pip3 install mysql-connector-python on Mac
 4. Open file mysql_table_create.py and run (thisbuild the db and tables)
 5. You can use mysql_connection.py to establish a client to query from.
+6. If you have other mysql databases, use mysql query: "use electric;"
+7. Create a .env file in the main project directory with the following code 
+DB_USER=root
+DB_PASSWORD=Capstone
+DB_HOST=127.0.0.1
+DB_DATABASE=Electric
+8. If having an error with recognizing import decouple, in terminal execute: "pip install python-decouple" for Windows, "pip3 install python-decouple" for MAC

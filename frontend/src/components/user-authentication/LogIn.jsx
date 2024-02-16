@@ -1,7 +1,6 @@
 import React, {useState} from "react";
 import { getHashedPassword } from "./hash";
 
-//test push
 const Login = (props) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
