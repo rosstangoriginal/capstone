@@ -3,11 +3,12 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import {DAppProvider} from "@usedapp/core"
+import {DAppProvider, ChainId} from "@usedapp/core"
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const config = {  readOnlyChainId: ChainId.Sepolia, readOnlyUrls: { [ChainId.Sepolia]:  "https://sepolia.infura.io/v3/219361541aaf4c93ab6cdb0dce733db0"}}
 root.render(
-  <DAppProvider config={{supportedChains:[11155111]}}>
+  <DAppProvider config={config}>
     <React.StrictMode>
       <BrowserRouter>
       <App />
