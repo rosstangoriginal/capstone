@@ -35,6 +35,28 @@ def check_credentials(email, password):
         if db:
             db.close()
 
+def get_user(email):
+    try:
+        db = mysql.connector.connect(**db_config)
+        cursor = db.cursor(dictionary=True)
+
+        # Execute a query to retrieve all users
+        query = "SELECT * FROM User WHERE email =%s"
+        cursor.execute(query, (email))
+
+        user = cursor.fetchone()
+
+        return jsonify({'firstName': user.FirstName,
+                        'lastName': user.LastName,
+                        'email': user.Email,
+                        'accountNum': user.AccountNumber
+        })
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
+    finally:
+        cursor.close()
+
 @blueprint.route('/get_users', methods=['GET'])
 def get_users():
     try:
@@ -64,8 +86,15 @@ def login():
     if not email or not password:
         return jsonify({"message": "Email and password are required."}), 400
 
+    result = get_user(email)
+
     if check_credentials(email, password):
-        return jsonify({"message": "Login successful."}), 200
+        return jsonify({"message": "Login successful.", 
+                       "firstName": "Sam",
+                       "lastName": "Adams",
+                       "email": "SamAdams@gmail.com",
+                       "accountNum": "270" 
+        }), 200
     else:
         return jsonify({"message": "Login failed. Invalid credentials."}), 401
     

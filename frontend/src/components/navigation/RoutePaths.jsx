@@ -6,6 +6,7 @@ import SetNewPassword from "../user-authentication/SetNewPassword";
 import Billing from "../user-stats/Billing";
 import EnergyUsage from "../user-stats/EnergyUsage";
 import Profile from "../user-stats/Profile";
+import AccountRetrieval from "../user-stats/AccountRetrieval";
 
 const RoutePaths = () => {
   return (
@@ -31,6 +32,7 @@ const RoutePaths = () => {
             }
           />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/account-retrieval" element={<AccountRetrieval />} />
         </Routes>
   );
 };

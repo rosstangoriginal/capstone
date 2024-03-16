@@ -5,12 +5,12 @@ const Dashboard = () => {
         <Fragment>
             <div>
                 <div class="header">
-                    <h1>Welcome Darth</h1>
+                    <h1>Welcome {localStorage.getItem('firstName')}</h1>
                 </div>
                 <div class="table-responsive">
                     <div class="panel-title" align="left">
                     You are viewing account # 
-                    <strong>123456789</strong>
+                    <strong>{localStorage.getItem('accountNum')}</strong>
                     </div>
                     <div class="panel-body">
                         <table width="100%">
@@ -20,7 +20,7 @@ const Dashboard = () => {
                                         <strong>Account Name:</strong>
                                     </td>
                                     <td align="left">
-                                        Darth Vader
+                                        {localStorage.getItem('firstName')} {localStorage.getItem('lastName')}
                                     </td>
                                     <td valign="top" align="left" nowrap>
                                         <strong>Preferred Phone #:</strong>
@@ -58,6 +58,10 @@ const Dashboard = () => {
                     </div>
                 </div>
                 <div class="panel-body center-text panel-dashboard-btn">
+                    <a id="retrieveAccount" type="button" class="btn btn-info btn-dashboard" href="http://localhost:3000/account-retrieval">
+                    Retrieve Account
+                    </a>  
+                    
                     <a id="viewEnergyUsage" type="button" class="btn btn-info btn-dashboard" href="http://localhost:3000/energy-usage">
                     View Energy Usage
                     </a>

@@ -97,7 +97,7 @@ const EnergyUsage = () => {
     return (
         <div>
             <div class="header">
-                <h1>Energy usage</h1>
+                <h1>Energy usage for {localStorage.getItem('company')}</h1>                
             </div>
             
             {/* <h4>Pay energy bill of 0.05 ether</h4> */}
