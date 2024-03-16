@@ -40,13 +40,15 @@ const Login = (props) => {
 
     // Log in a user using email and password
     const logIn = () => {
+        localStorage.clear()
+        
         const data = {
-            email: this.email,
-            password: getHashedPassword(this.password)
-        }
+            email: email,
+            password: getHashedPassword(password)
+        }      
 
         // *** url is subject to change when we know where the backend is hosted and on what port
-        const url = "http://127.0.0.1:5000/login_endpoints/login"
+        const url = "http://127.0.0.1:5000/login_api/login"
        
         fetch(url, {
             method: "POST",
@@ -57,7 +59,11 @@ const Login = (props) => {
         })
         .then(r => r.json())
         .then(r => {
-            if ('success' === r.message) {
+            if ('Login successful.' === r.message) {
+                localStorage.setItem('firstName', r.firstName)
+                localStorage.setItem('lastName', r.lastName)
+                localStorage.setItem('email', r.email)
+                localStorage.setItem('accountNum', r.accountNum)
                 window.location = "/dashboard"
             } else {
                 window.alert("Wrong email or password")

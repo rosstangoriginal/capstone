@@ -7,3 +7,6 @@ export function getHashedPassword(password) {
     var hashedPassword = getHashedPassword(inputedPassword);
     return storedPassword === hashedPassword;
   }
+
+  
+  

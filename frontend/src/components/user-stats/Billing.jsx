@@ -4,7 +4,7 @@ const Billing = () => {
   return (
     <div>
       <div class="header billing-header">
-        <h1>Billing</h1>
+        <h1>Billing for {localStorage.getItem('company')}</h1>
       </div>
       <div class="panel-body">
         <div class="row">

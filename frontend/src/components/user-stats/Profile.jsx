@@ -6,7 +6,7 @@ const Profile = () => {
             <div>
                 <div class="table-responsive">
                     <div class="header profile-header">
-                        <h1>This is your acount profile Darth</h1>
+                        <h1>This is your acount profile {localStorage.getItem('firstName')}</h1>
                     </div>
                     <div class="panel-title" align="left">
                         <strong>My Account Profile </strong>
@@ -19,7 +19,7 @@ const Profile = () => {
                                         <strong>Account Number:</strong>
                                     </td>
                                     <td align="left">
-                                        123456789
+                                        {localStorage.getItem('accountNum')}
                                     </td>
                                     <td colspn="2">
                                     </td>
@@ -29,7 +29,7 @@ const Profile = () => {
                                         <strong>First Name:</strong>
                                     </td>
                                     <td align="left">
-                                        Darth
+                                        {localStorage.getItem('firstName')}
                                     </td>
                                     <td colspn="2">
                                     </td>
@@ -39,7 +39,7 @@ const Profile = () => {
                                         <strong>Last Name:</strong>
                                     </td>
                                     <td align="left">
-                                        Vader
+                                        {localStorage.getItem('lastName')}
                                     </td>
                                     <td colspn="2">
                                     </td>
@@ -49,7 +49,7 @@ const Profile = () => {
                                         <strong>Email Address:</strong>
                                     </td>
                                     <td align="left">
-                                        Darth.Vader@gmail.com
+                                        {localStorage.getItem('email')}
                                     </td>
                                     <td colspn="2">
                                     </td>
