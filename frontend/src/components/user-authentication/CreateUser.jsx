@@ -60,8 +60,7 @@ const CreateUser = (props) => {
             first_name: firstName,
             last_name: lastName,
             email: email,
-            password: getHashedPassword(password),
-            account_number: Math.floor(Math.random() * 100000) 
+            password: getHashedPassword(password)
         }
 
         // *** url is subject to change when we know where the backend is hosted and on what port

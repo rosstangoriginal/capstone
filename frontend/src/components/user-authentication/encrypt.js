@@ -36,11 +36,7 @@ async function importPublicKey(pemKey) {
     return window.btoa(String.fromCharCode.apply(null, new Uint8Array(encrypted)));
   }
   
-  export function generateNonce(length = 32) {
-    const array = new Uint8Array(length);
-    window.crypto.getRandomValues(array);
-    return array.join('');
-  }
+
   
   export async function encryptAndGenerateNonce(password, pemPublicKey, providedNonce) {
     try {
