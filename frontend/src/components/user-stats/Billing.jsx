@@ -1,5 +1,77 @@
+import {ethers} from "ethers";
+import { useState } from "react";
+import networkMapping from "../../chain-info/deployments/map.json"
+import EnergyBillingABIget from '../../chain-info/contracts/EnergyBilling.json';
 const Billing = () => {
   // const transactionStatus = localStorage.getItem('transactionStatus');
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [defaultAccount, setDefaultAccount] = useState(null);
+  const [userBalance, setUserBalance] = useState(null);
+  const [peakConsumption, setPeakConsumption] = useState('');
+  const [midPeakConsumption, setMidPeakConsumption] = useState('');
+  const [offPeakConsumption, setOffPeakConsumption] = useState('');
+  const energyContract = networkMapping[11155111]["EnergyBilling"][0]
+//Will need to change to provider of costumer's network, dynamic
+const providerAddress = '0xf9a0f668515Cf55393E728Cfd5c2a4b10b49d09E'
+const EnergyBillingABI = EnergyBillingABIget.abi
+const ConnectButton = () => {
+    if(window.ethereum){
+        window.ethereum.request({method: 'eth_requestAccounts'})
+        .then(result => {
+            accountChanged([result[0]])
+        })
+    }else{
+        setErrorMessage('install Metamask')
+    } 
+    };
+    const accountChanged = (accountName) => {
+      setDefaultAccount(accountName)
+      getUserBalance(accountName)
+  };
+  
+  const getUserBalance = (accountAddress) =>{
+      window.ethereum.request({method: 'eth_getBalance', params: [String(accountAddress), "latest"]})
+      .then(balance =>{
+          setUserBalance(ethers.utils.formatEther(balance));
+      })
+  };
+  const reportConsumptionAndPayBill = async () => {
+    if (!window.ethereum) return alert("Please install MetaMask.");
+
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const energyBillingContract = new ethers.Contract(energyContract, EnergyBillingABI, signer);
+
+    try {
+        // Automatically select provider for user if not already selected
+        await selectProviderIfNeeded(energyBillingContract, signer);
+
+        // Report consumption
+        await energyBillingContract.reportConsumption(
+            Number(peakConsumption),
+            Number(midPeakConsumption),
+            Number(offPeakConsumption)
+        );
+
+        // Calculate bill to be paid
+        const billAmount = await energyBillingContract.calculateBill(await signer.getAddress());
+
+        // Pay the bill
+        await energyBillingContract.payBill({ value: billAmount });
+
+        alert('Bill paid successfully!');
+    } catch (error) {
+        console.error(error);
+        alert('Failed to process your request.');
+    }
+};
+const selectProviderIfNeeded = async (contract, signer) => {
+  const userAddress = await signer.getAddress();
+  const userProvider = await contract.userToProvider(userAddress);
+  if (userProvider === ethers.constants.AddressZero) { // This checks if the user has no provider selected
+      await contract.selectProvider(providerAddress, { from: userAddress });
+  }
+};
 
   return (
     <div>
@@ -82,10 +154,30 @@ const Billing = () => {
             </table>
           </div>
           <div class="col-sm-4">
-            <h4 class="windowTitle">Pay My Bill</h4>
+          <h4 class="windowTitle">Pay My Bill</h4>
             <div class="panel panel-primary">
-              <div class="panel-heading text-center"> Current Balance: $0.00 </div>
+            <div class="panel-heading text-center"> Current Balance: $0.00 </div>
             </div>
+            <button onClick={ConnectButton}>Connect Wallet</button>
+            {defaultAccount && (
+            <div>
+              <h3>Address: {defaultAccount}</h3>
+              <h3>Balance: {userBalance}</h3>
+              <div>
+                <label>Peak Consumption:</label>
+                <input type="number" value={peakConsumption} onChange={(e) => setPeakConsumption(e.target.value)} />
+              </div>
+              <div>
+                <label>Mid-Peak Consumption:</label>
+                <input type="number" value={midPeakConsumption} onChange={(e) => setMidPeakConsumption(e.target.value)} />
+              </div>
+              <div>
+                <label>Off-Peak Consumption:</label>
+                <input type="number" value={offPeakConsumption} onChange={(e) => setOffPeakConsumption(e.target.value)} />
+              </div>
+              <button onClick={reportConsumptionAndPayBill}>Report Consumption & Pay Bill</button>
+                </div>
+              )}            
           </div>
         </div>
       </div>

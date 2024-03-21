@@ -1,0 +1,15 @@
+{
+  "contracts": {
+    "EnergyBilling": "03b8df53909f5c75ea38fa152ee0a0241117c547"
+  },
+  "tests": {
+    "tests/test_energy_Contract.py": {
+      "coverage": false,
+      "isolated": false,
+      "results": ".",
+      "sha1": "3279bb5ef381796a8704befa3f543939708eb61e",
+      "txhash": []
+    }
+  },
+  "tx": {}
+}
