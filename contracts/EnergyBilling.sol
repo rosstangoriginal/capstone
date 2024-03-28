@@ -63,9 +63,13 @@ contract EnergyBilling {
         Provider memory providerRates = providers[providerAddr];
         UserConsumption memory consumption = userConsumption[user];
 
-        uint256 peakCharge = consumption.peakConsumption * providerRates.peakRate;
-        uint256 midPeakCharge = consumption.midPeakConsumption * providerRates.midPeakRate;
-        uint256 offPeakCharge = consumption.offPeakConsumption * providerRates.offPeakRate;
+        uint256 peakRatePerWh = providerRates.peakRate / 1000;
+        uint256 midPeakRatePerWh = providerRates.midPeakRate / 1000;
+        uint256 offPeakRatePerWh = providerRates.offPeakRate / 1000;
+
+        uint256 peakCharge = consumption.peakConsumption * peakRatePerWh; 
+        uint256 midPeakCharge = consumption.midPeakConsumption * midPeakRatePerWh;
+        uint256 offPeakCharge = consumption.offPeakConsumption * offPeakRatePerWh;
 
         uint256 totalCharge = peakCharge + midPeakCharge + offPeakCharge;
 

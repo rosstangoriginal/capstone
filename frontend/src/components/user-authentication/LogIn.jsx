@@ -63,7 +63,7 @@ const Login = (props) => {
                 localStorage.setItem('firstName', r.firstName)
                 localStorage.setItem('lastName', r.lastName)
                 localStorage.setItem('email', r.email)
-                localStorage.setItem('accountNum', r.accountNum)
+                localStorage.setItem('userID', r.userId)
                 window.location = "/dashboard"
             } else {
                 window.alert("Wrong email or password")

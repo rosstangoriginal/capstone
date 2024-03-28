@@ -48,8 +48,7 @@ def get_user(email):
 
         return jsonify({'firstName': user.FirstName,
                         'lastName': user.LastName,
-                        'email': user.Email,
-                        'accountNum': user.AccountNumber
+                        'email': user.Email
         })
 
     except Exception as e:
@@ -86,34 +85,80 @@ def login():
     if not email or not password:
         return jsonify({"message": "Email and password are required."}), 400
 
-    result = get_user(email)
+    db = mysql.connector.connect(**db_config)
+    cursor = db.cursor(dictionary=True)
+    query = "SELECT UserID, FirstName, LastName FROM User WHERE email = %s"
+    cursor.execute(query, (email,))
+
+    user_data = cursor.fetchone()
+    print("user_data: ",user_data)
+    cursor.close()
+
 
     if check_credentials(email, password):
-        return jsonify({"message": "Login successful.", 
-                       "firstName": "Sam",
-                       "lastName": "Adams",
-                       "email": "SamAdams@gmail.com",
-                       "accountNum": "270" 
-        }), 200
+        user_id = user_data['UserID']
+        first_name = user_data['FirstName']
+        last_name = user_data['LastName']
+        return jsonify({
+            "message": "Login successful.",
+            'userId': user_id,
+            'firstName': first_name,
+            'lastName': last_name
+            }), 200
     else:
         return jsonify({"message": "Login failed. Invalid credentials."}), 401
+
+def login():
+    try:
+
+        email = request.get_json().get('email')
+        #email = request.args.get('Email')
+        
+        if not email:
+            return jsonify({'error': 'Email is required'}), 400
+        
+        db, cursor = mysql_connect()
+        query = "SELECT Email, Password, Salt, UserID, FirstName, LastName FROM User WHERE email = %s"
+        cursor.execute(query, (email,))
+
+        user_data = cursor.fetchone()
+        cursor.close()
+
+        if user_data:
+            password = user_data[1]
+            salt = user_data[2]
+            userId = user_data[3]
+            firstName = user_data[4]
+            lastName = user_data[5]
+            return jsonify({
+                "message": "Login successful.",
+                'email': email, 
+                'password': password, 
+                'salt':salt, 
+                'userId':userId,
+                'firstName':firstName,
+                'lastName':lastName
+                }), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
     
 @blueprint.route('/populate_database', methods=['GET'])
 def populate_database():
     try:
         # Dummy data for username and password
         dummy_data = [
-            ("John", "Doe", "test@testing.com", 'password', '809898008'),
-            ("Zach", "Fong", "zachf@testing.com",  'password1', '78989979'),
-            ("Tom", "Ford", "tf@testing.com", 'password2', '789743439')
+            ("John", "Doe", "test@testing.com", 'password'),
+            ("Zach", "Fong", "zachf@testing.com",  'password1'),
+            ("Tom", "Ford", "tf@testing.com", 'password2')
         ]
         db = mysql.connector.connect(**db_config)
         cursor = db.cursor()
 
         # Insert dummy data into the User table
-        for FirstName, LastName, Email, Password,AccountNumber in dummy_data:
-            query = "INSERT INTO User (FirstName, LastName, Email, Password, AccountNumber) VALUES (%s, %s, %s, %s, %s)"
-            cursor.execute(query, (FirstName, LastName, Email, Password, AccountNumber))
+        for FirstName, LastName, Email, Password in dummy_data:
+            query = "INSERT INTO User (FirstName, LastName, Email, Password) VALUES (%s, %s, %s, %s)"
+            cursor.execute(query, (FirstName, LastName, Email, Password))
 
         db.commit()
 

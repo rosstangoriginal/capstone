@@ -3,13 +3,23 @@ CREATE TABLE User (
     FirstName VARCHAR(255) NOT NULL,
     LastName VARCHAR(255) NOT NULL,
     Email VARCHAR(255) NOT NULL,
-    Password VARCHAR(255) NOT NULL,
-    AccountNumber VARCHAR(255) NOT NULL
+    Password VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE Energy_Account (
+    EnergyAccountID INT AUTO_INCREMENT PRIMARY KEY,
+    UserID INT,
+    EnergyProvider VARCHAR(255) NOT NULL,
+    AccountNumber VARCHAR(50) NOT NULL,
+    Password VARCHAR(1024) NOT NULL,
+    Address VARCHAR(255),
+    AccountName VARCHAR(100),
+    PhoneNumber VARCHAR(20), 
+    FOREIGN KEY (UserID) REFERENCES User(UserID)
+);
 
 CREATE TABLE Electricity_Usage (
-    Usage_ID INT AUTO_INCREMENT PRIMARY KEY,
+    UsageID INT AUTO_INCREMENT PRIMARY KEY,
     UserID INT,
     Total_On_Peak DECIMAL(10, 2),
     Total_Off_Peak DECIMAL(10, 2),

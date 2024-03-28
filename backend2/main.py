@@ -7,6 +7,7 @@ from blueprints.jinja_endpoint import blueprint as jinja_template_blueprint
 from blueprints.login_endpoints import blueprint as login
 from blueprints.vault_write import blueprint as vault_api
 from blueprints.create_account_api import blueprint as create_account_api
+from blueprints.energy_account import blueprint as energy_account
 
 
 
@@ -18,6 +19,7 @@ app.register_blueprint(jinja_template_blueprint)
 app.register_blueprint(login)
 app.register_blueprint(vault_api)
 app.register_blueprint(create_account_api)
+app.register_blueprint(energy_account)
 
 if __name__ == "__main__":
     app.run()
