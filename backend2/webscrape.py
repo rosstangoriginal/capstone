@@ -38,8 +38,8 @@ def download_data(credentials, from_date: datetime.date, to_date: datetime.date,
             data={
                 "password": credentials["password"],
                 "loginBy": "accountNumber",
-                "accessCode": credentials["account_number"],
-                "password2": credentials["password"],
+                "accessEmail": credentials["account_number"],
+                "password1": credentials["password"],
             },
         )
 
