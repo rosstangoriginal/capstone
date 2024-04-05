@@ -108,11 +108,6 @@ const Profile = () => {
                         </table>
                     </div>
                 </div>
-                <div class="panel-body center-text">
-                    <a id="viewEnergyUsage" type="button" class="btn btn-info" href="http://localhost:3000/">
-                        Edit Profile
-                    </a>
-                </div>
             </div>
         </Fragment>
     )

@@ -1,13 +1,14 @@
-import {Chart} from 'chart.js/auto';
+// import {Chart} from 'chart.js/auto';
 import {CategoryScale} from 'chart.js';
 import { UserData } from '../utils/UserData';
 import LineChart from '../charts/LineChart';
+import {Chart} from "react-google-charts"
 
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 
-Chart.register(CategoryScale);
+// Chart.register(CategoryScale);
 
 const EnergyUsage = () => {
     const navigate = useNavigate();
@@ -44,26 +45,50 @@ const EnergyUsage = () => {
     //     }
     // };
     
-    const [chartData, setChartData] = useState({
-        labels: UserData.map((data) => data.month),
-        datasets: [
-            {
-                label: "Energy Used (kWh)",
-                data: UserData.map((data) => data.usage)
-            }
-        ]
-    })
+    // const [chartData, setChartData] = useState({
+    //     labels: UserData.map((data) => data.metric),
+    //     datasets: [
+    //         {
+    //             label: "Energy Used (kWh)",
+    //             data: UserData.map((data) => data.usage)
+    //         }
+    //     ]
+    // })
 
     const [amount, setAmount] = useState(""); 
+    
+    const data = [
+        ["Metric", "Usage"],
+        ["On Peak", Number(localStorage.getItem("totalOnPeak"))],
+        ["Off Peak", Number(localStorage.getItem("totalOffPeak"))],
+        ["Mid Peak", Number(localStorage.getItem("totalMidPeak"))],
+      ];
+
+    const options = {
+        title: "Electricity Usage by On Peak, Off Peak, & Mid Peak",
+        chartArea: { width: "50%" },
+        colors: ["#3b8c82"],
+        hAxis: {
+          title: "Electricity Usage (kWh)",
+          minValue: 0,
+        },
+        vAxis: {
+          title: "Metric",
+        },
+    };
 
     return (
         <div>
             <div class="header">
                 <h1>Energy usage for {localStorage.getItem('energyProvider')}</h1>                
             </div>           
-            <div style={{width: 1000, height: 500, display: 'flex', justifyContent: "center", margin:"auto" }}>
-                <LineChart name="usage-chart" chartData={chartData}/>
-            </div>
+            <Chart
+                chartType="BarChart"
+                width="100%"
+                height="400px"
+                data={data}
+                options={options}
+            />
         </div>
     );
 };

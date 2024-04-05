@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@canvasjs/react-charts": "^1.0.2",
+    "react-google-charts": "^4.0.1"
+  }
+}
