@@ -35,9 +35,15 @@ def create_account():
     cursor.execute("INSERT INTO User (FirstName, LastName, Email, Password) VALUES (%s, %s, %s, %s)",
                    (firstName, lastName, email, password))
     db.commit()
+
+    cursor.execute("SELECT UserID FROM User WHERE Email = %s", (email,))
+    new_user_id = cursor.fetchone()
+
     cursor.close()
     db.close()
 
 
-    return jsonify({'message': 'Account created successfully'}), 201
+    return jsonify({'message': 'Account created successfully',
+                    'user_id': new_user_id[0]
+    }), 201
 

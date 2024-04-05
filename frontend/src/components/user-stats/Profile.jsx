@@ -56,10 +56,40 @@ const Profile = () => {
                                 </tr>
                                 <tr class="spaceUnder">
                                     <td valign="top" align="left" nowrap>
+                                        <strong>Energy Provider:</strong>
+                                    </td>
+                                    <td align="left">
+                                        {localStorage.getItem('energyProvider')}
+                                    </td>
+                                    <td colspn="2">
+                                    </td>
+                                </tr>
+                                <tr class="spaceUnder">
+                                    <td valign="top" align="left" nowrap>
+                                        <strong>Account Number:</strong>
+                                    </td>
+                                    <td align="left">
+                                        {localStorage.getItem('accountNum')}
+                                    </td>
+                                    <td colspn="2">
+                                    </td>
+                                </tr>
+                                <tr class="spaceUnder">
+                                    <td valign="top" align="left" nowrap>
                                         <strong>Home Address:</strong>
                                     </td>
                                     <td align="left">
-                                        123 Deathstar Drive
+                                        {localStorage.getItem('address')}
+                                    </td>
+                                    <td colspn="2">
+                                    </td>
+                                </tr>
+                                <tr class="spaceUnder">
+                                    <td valign="top" align="left" nowrap>
+                                        <strong>Account Name:</strong>
+                                    </td>
+                                    <td align="left">
+                                        {localStorage.getItem('accountName')}
                                     </td>
                                     <td colspn="2">
                                     </td>
@@ -69,29 +99,14 @@ const Profile = () => {
                                         <strong>Phone #:</strong>
                                     </td>
                                     <td align="left">
-                                        (647) 123 - 4567
+                                        {localStorage.getItem('phoneNum')}
                                     </td>
                                     <td colspn="2">
                                     </td>
-                                </tr>
-                                <tr class="spaceUnder">
-                                    <td valign="top" align="left" nowrap>
-                                        <strong>Challenge Question:</strong>
-                                    </td>
-                                    <td align="left">
-                                        Who was your 3rd grade teacher?
-                                    </td>
-                                    <td colspn="2">
-                                    </td>
-                                </tr>
+                                </tr>           
                             </tbody>
                         </table>
                     </div>
-                </div>
-                <div class="panel-body center-text">
-                    <a id="viewEnergyUsage" type="button" class="btn btn-info" href="http://localhost:3000/">
-                        Edit Profile
-                    </a>
                 </div>
             </div>
         </Fragment>

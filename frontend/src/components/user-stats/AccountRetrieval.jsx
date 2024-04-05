@@ -4,10 +4,11 @@ import { encryptAndGenerateNonce } from "../user-authentication/encrypt";
 
 const AccountRetrieval = (props) => {
   const [company, setCompany] = useState(null);
-  const [companyError, setCompanyError] = useState("");
-  const [username, setUsername] = useState("");
+  const [accountNum, setAccountNum] = useState("");
   const [password, setPassword] = useState("");
-  const [usernameError, setUsernameError] = useState("");
+
+  const [companyError, setCompanyError] = useState("");
+  const [accountNumError, setaccountNumError] = useState("");
   const [passwordError, setPasswordError] = useState("");
 
   const postEncryptedData = async (encryptedPassword, nonce) => {
@@ -20,7 +21,7 @@ const AccountRetrieval = (props) => {
     const postData = {
       userId,
       energyProvider: company.value,
-      accountNumber: username, // Assuming 'username' is meant to be 'accountNumber'
+      accountNumber: accountNum, 
       password: encryptedPassword,
       nonce,
     };
@@ -40,7 +41,6 @@ const AccountRetrieval = (props) => {
       }
       const responseData = await response.json();
       console.log('Success:', responseData);
-      // Handle success response here, possibly informing the user
     } catch (error) {
       console.error('There was a problem with your POST operation:', error);
     }
@@ -52,8 +52,8 @@ const AccountRetrieval = (props) => {
       return;
     }
 
-    if (!username) {
-      setUsernameError("Please enter your username");
+    if (!accountNum) {
+      setaccountNumError("Please enter your username");
       return;
     }
 
@@ -76,6 +76,7 @@ const AccountRetrieval = (props) => {
         console.log('Encrypted password:', encryptedPassword);
         console.log('Nonce:', nonce);
         await postEncryptedData(encryptedPassword, nonce);
+        window.location = "/"
       } catch (error) {
         console.error('Encryption or posting error:', error);
       }
@@ -109,18 +110,18 @@ const AccountRetrieval = (props) => {
       <br />
       <div className={"inputContainer"}>
         <input
-          value={username}
-          placeholder="Enter your username here"
-          onChange={(ev) => setUsername(ev.target.value)}
+          value={accountNum}
+          placeholder="Enter your account number here"
+          onChange={(ev) => setAccountNum(ev.target.value)}
           className={"inputBox"}
         />
-        <label className="errorLabel">{usernameError}</label>
+        <label className="errorLabel">{accountNumError}</label>
       </div>
       <br />
       <div className={"inputContainer"}>
         <input
           value={password}
-          placeholder="Enter your password here"
+          placeholder="Enter your energy provider password here"
           onChange={(ev) => setPassword(ev.target.value)}
           type="password"
           name="password"

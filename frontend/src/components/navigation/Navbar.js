@@ -12,7 +12,6 @@ export default function Navbar() {
             </Link>
             <ul>
                 <CustomLink to="/dashboard">Home</CustomLink>
-                <CustomLink to="/account-retrieval">Account Retrieval</CustomLink>
                 <CustomLink to="/energy-usage">Energy Usage</CustomLink>
                 <CustomLink to="/billing">Billing</CustomLink>
                 <CustomLink to="/profile">Profile</CustomLink>

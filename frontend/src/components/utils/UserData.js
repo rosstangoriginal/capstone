@@ -1,17 +1,17 @@
 export const UserData = [
     {
         id: 1,
-        month: "January",
-        usage: 50,
+        metric: "On Peak",
+        usage: localStorage.getItem('totalOnPeak'),
     },
     {
         id: 2,
-        month: "February",
-        usage: 65,
+        metric: "Off Peak",
+        usage: localStorage.getItem('totalOffPeak'),
     },
     {
         id: 3,
-        month: "March",
-        usage: 55,
+        metric: "Mid Peak",
+        usage: localStorage.getItem('totalMidPeak'),
     },
 ]

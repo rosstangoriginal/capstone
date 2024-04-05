@@ -77,7 +77,8 @@ const CreateUser = (props) => {
             .then(response => response.json())
             .then(response => {
                 if ('Account created successfully' === response.message) {
-                    window.location = "/"
+                    localStorage.setItem('userID', response.user_id)
+                    window.location = "/account-retrieval"
                 } else {
                     window.alert("Profile could not be created")
                 }
@@ -140,7 +141,7 @@ const CreateUser = (props) => {
                     className={"inputButton"}
                     type="button"
                     onClick={onButtonClick}
-                    value={"Create User"} 
+                    value={"Create User Profile"} 
                 />
                 <br />
                 <input
