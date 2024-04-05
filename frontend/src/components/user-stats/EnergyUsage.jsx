@@ -13,37 +13,36 @@ const EnergyUsage = () => {
     const navigate = useNavigate();
     const [transactionStatus, setTransactionStatus] = useState(null);
 
-    const handleSubmit = async () => {
-        try {
-            const response = await fetch(
-                "http://localhost:3000/perform_transaction",
-                {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({}),
-                }
-            );
+    // const handleSubmit = async () => {
+    //     try {
+    //         const response = await fetch(
+    //             "http://localhost:3000/perform_transaction",
+    //             {
+    //                 method: 'POST',
+    //                 headers: {
+    //                     "Content-Type": "application/json",
+    //                 },
+    //                 body: JSON.stringify({}),
+    //             }
+    //         );
 
-            const result = await response.json();
+    //         const result = await response.json();
 
-            if (result.success) {
-                // if(true) {
-                setTransactionStatus("Transaction successful!");
-                localStorage.setItem('transactionStatus', transactionStatus);
-                localStorage.setItem('etherPaid', amount);
-                navigate('/Billing');
-            } else {
-                setTransactionStatus(`Error: ${result.error}`);
-            }
-        } catch (error) {
-            console.error(error);
-            setTransactionStatus(
-                "An error occurred while performing the transaction."
-            );
-        }
-    };
+    //         if (result.success) {
+    //             setTransactionStatus("Transaction successful!");
+    //             localStorage.setItem('transactionStatus', transactionStatus);
+    //             localStorage.setItem('etherPaid', amount);
+    //             navigate('/Billing');
+    //         } else {
+    //             setTransactionStatus(`Error: ${result.error}`);
+    //         }
+    //     } catch (error) {
+    //         console.error(error);
+    //         setTransactionStatus(
+    //             "An error occurred while performing the transaction."
+    //         );
+    //     }
+    // };
     
     const [chartData, setChartData] = useState({
         labels: UserData.map((data) => data.month),
@@ -55,79 +54,13 @@ const EnergyUsage = () => {
         ]
     })
 
-    const [amount, setAmount] = useState("");
-    
-
-    // const handleSubmit = (e) => {
-        // e.preventDefault();
-        // const bill = {amount};
-
-        /* ****** modify when we get the actual endpoint  */
-        // fetch('http://localhost:8000/', {
-        //     method: 'POST',
-        //     headers: {"Content-Type": "application/json"},
-        //     body: JSON.stringify(bill)
-        // })
-        // .then((response) => {
-        //     if(response.ok) {
-        //         // Happy path
-        //         /* **** modify after testing */
-        //         return response.json();
-                // localStorage.setItem('currentEnergyUsed', amount);
-                // localStorage.setItem('currentBillPaid', response.data.amountPaid);
-                // localStorage.setItem('currentBillPaid', 100);
-                // navigate('/Billing');
-        //     }
-        //     return Promise.reject(response);
-        // })
-        // .then((result) => {
-        //     console.log(result);
-        // })
-        // .catch((error) => {
-        //     console.log('Something went wrong.', error);
-        // })
-    // }
-
-    // const monthOptions = [
-    //     {value: UserData[0].usage, label: "January"},
-    //     {value: UserData[1].usage, label: "February"},
-    //     {value: UserData[2].usage, label: "March"},
-    // ];
+    const [amount, setAmount] = useState(""); 
 
     return (
         <div>
             <div class="header">
-                <h1>Energy usage for {localStorage.getItem('company')}</h1>                
-            </div>
-            
-            {/* <h4>Pay energy bill of 0.05 ether</h4> */}
-            
-            {/* <form onSubmit={handleSubmit}>
-                <label>Enter the amount of ether you wish to pay</label>
-                <input
-                    type="text"
-                    required
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                />
-                <div className="mt-5 m-auto w-50">
-                    <Select 
-                        // options={monthOptions} 
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                    >
-                        <option value={50}>Januray</option>
-                        <option value={65}>February</option> 
-                        <option value={55}>March</option>     
-                    </Select>
-                </div> 
-                
-                
-                
-            </form>
-                */}
-            {/* <button onClick={handleSubmit}>Perform Transaction</button> */}
-            {/* {transactionStatus && <p>{transactionStatus}</p>} */}
+                <h1>Energy usage for {localStorage.getItem('energyProvider')}</h1>                
+            </div>           
             <div style={{width: 1000, height: 500, display: 'flex', justifyContent: "center", margin:"auto" }}>
                 <LineChart name="usage-chart" chartData={chartData}/>
             </div>

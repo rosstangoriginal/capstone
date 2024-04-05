@@ -87,23 +87,45 @@ def login():
 
     db = mysql.connector.connect(**db_config)
     cursor = db.cursor(dictionary=True)
-    query = "SELECT UserID, FirstName, LastName FROM User WHERE email = %s"
+    query = "SELECT UserID, FirstName, LastName, Email FROM User WHERE email = %s"
     cursor.execute(query, (email,))
-
     user_data = cursor.fetchone()
+
+    query2 = "SELECT * FROM Energy_Account WHERE UserID = %s"
+    cursor.execute(query2, (user_data['UserID'], ))
+    energy_account_data = cursor.fetchone()
+
+    query3 = "SELECT * FROM Electricity_Usage WHERE UserID = %s"
+    cursor.execute(query3, (user_data['UserID'], ))
+    electricity_usage_data = cursor.fetchone()
+
     print("user_data: ",user_data)
+    print("energy_account_data: ", energy_account_data)
+    print("electricity_usage_data: ", electricity_usage_data)
     cursor.close()
 
 
     if check_credentials(email, password):
-        user_id = user_data['UserID']
-        first_name = user_data['FirstName']
-        last_name = user_data['LastName']
+        # user_id = user_data['UserID']
+        # first_name = user_data['FirstName']
+        # last_name = user_data['LastName']
+        # email = user_data['Email']
         return jsonify({
             "message": "Login successful.",
-            'userId': user_id,
-            'firstName': first_name,
-            'lastName': last_name
+            'userId': user_data['UserID'],
+            'firstName': user_data['FirstName'],
+            'lastName': user_data['LastName'],
+            'email': user_data['Email'],
+            'energyProvider': energy_account_data['EnergyProvider'],
+            'accountNum': energy_account_data['AccountNumber'],
+            'address': energy_account_data['Address'],
+            'accountName': energy_account_data['AccountName'],
+            'phoneNum': energy_account_data['PhoneNumber'],
+            'totalOnPeak': electricity_usage_data['Total_On_Peak'],
+            'totalOffPeak': electricity_usage_data['Total_Off_Peak'],
+            'totalMidPeak': electricity_usage_data['Total_Mid_Peak'],
+            'elecFromDate': electricity_usage_data['From_Date'],
+            'elecToDate': electricity_usage_data['To_Date']
             }), 200
     else:
         return jsonify({"message": "Login failed. Invalid credentials."}), 401

@@ -1,11 +1,17 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { getHashedPassword } from "./hash";
+
+
 
 const Login = (props) => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [emailError, setEmailError] = useState("")
     const [passwordError, setPasswordError] = useState("")
+
+    useEffect(() => {
+        localStorage.clear()
+    })
 
     const onButtonClick = () => {
         setEmailError("")
@@ -39,9 +45,7 @@ const Login = (props) => {
     }
 
     // Log in a user using email and password
-    const logIn = () => {
-        localStorage.clear()
-        
+    const logIn = () => {        
         const data = {
             email: email,
             password: getHashedPassword(password)
@@ -64,6 +68,16 @@ const Login = (props) => {
                 localStorage.setItem('lastName', r.lastName)
                 localStorage.setItem('email', r.email)
                 localStorage.setItem('userID', r.userId)
+                localStorage.setItem('energyProvider', r.energyProvider)
+                localStorage.setItem('accountNum', r.accountNum)
+                localStorage.setItem('address', r.address)
+                localStorage.setItem('accountName', r.accountName)
+                localStorage.setItem('phoneNum', r.phoneNum)
+                localStorage.setItem('totalOnPeak', r.totalOnPeak)
+                localStorage.setItem('totalOffPeak', r.totalOffPeak)
+                localStorage.setItem('totalMidPeak', r.totalMidPeak)
+                localStorage.setItem('elecFromDate', r.elecFromDate)
+                localStorage.setItem('elecToDate', r.elecToDate)
                 window.location = "/dashboard"
             } else {
                 window.alert("Wrong email or password")

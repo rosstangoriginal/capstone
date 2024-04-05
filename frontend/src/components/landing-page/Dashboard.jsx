@@ -9,7 +9,9 @@ const Dashboard = () => {
                 </div>
                 <div class="table-responsive">
                     <div class="panel-title" align="left">
-                    You are viewing account # 
+                    You are viewing 
+                    <strong> {localStorage.getItem('energyProvider')} </strong>
+                    account # 
                     <strong>{localStorage.getItem('accountNum')}</strong>
                     </div>
                     <div class="panel-body">
@@ -20,13 +22,13 @@ const Dashboard = () => {
                                         <strong>Account Name:</strong>
                                     </td>
                                     <td align="left">
-                                        {localStorage.getItem('firstName')} {localStorage.getItem('lastName')}
+                                        {localStorage.getItem('accountName')}
                                     </td>
                                     <td valign="top" align="left" nowrap>
                                         <strong>Preferred Phone #:</strong>
                                     </td>
                                     <td align="left">
-                                        (647) 123 - 4567
+                                        {localStorage.getItem('phoneNum')}
                                     </td>
                                 </tr>
                                 <tr>
@@ -34,7 +36,7 @@ const Dashboard = () => {
                                         <strong>Service Location:</strong>
                                     </td>
                                     <td align="left">
-                                        123 Deathstar Drive
+                                        {localStorage.getItem('address')}
                                     </td>
                                     <td valign="top" align="left" nowrap>
                                         <strong>Balance:</strong>
@@ -58,10 +60,6 @@ const Dashboard = () => {
                     </div>
                 </div>
                 <div class="panel-body center-text panel-dashboard-btn">
-                    <a id="retrieveAccount" type="button" class="btn btn-info btn-dashboard" href="http://localhost:3000/account-retrieval">
-                    Retrieve Account
-                    </a>  
-                    
                     <a id="viewEnergyUsage" type="button" class="btn btn-info btn-dashboard" href="http://localhost:3000/energy-usage">
                     View Energy Usage
                     </a>
