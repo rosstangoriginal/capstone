@@ -191,7 +191,7 @@ const reportConsumptionAndPayBill = async () => {
   try {
     let abi = commands.getABI();
     let contractBytecode = commands.getBytecode('EnergyBilling/bytecode2.txt');
-    let contractAddress = await commands.deployCommand(contractBytecode);
+    let contractAddress = "e99aff5c0e6d762a60683d57bf351b7d15a81ea1";
 
     const providerSelected = await selectProviderIfNeeded(web3, signer, abi, contractAddress);
     if (!providerSelected) {
