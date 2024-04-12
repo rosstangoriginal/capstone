@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import networkMapping from "../../chain-info/deployments/map.json"
 import EnergyBillingABIget from '../../chain-info/contracts/EnergyBilling.json';
 
+
 const Billing = () => {
   // const transactionStatus = localStorage.getItem('transactionStatus');
   const [billingHistory, setBillingHistory] = useState([]);
@@ -14,15 +15,60 @@ const Billing = () => {
   const [midPeakConsumption, setMidPeakConsumption] = useState('');
   const [offPeakConsumption, setOffPeakConsumption] = useState('');
   const energyContract = networkMapping[11155111]["EnergyBilling"][0]
-
+  const [isProcessing, setIsProcessing] = useState(false);
   const peakConsumptionInWh = scaleKwToWh(peakConsumption);
   const midPeakConsumptionInWh = scaleKwToWh(midPeakConsumption);
   const offPeakConsumptionInWh = scaleKwToWh(offPeakConsumption);
+  const [showModal, setShowModal] = useState(false);
 //Will need to change to provider of costumer's network, dynamic
 const providerAddress = '0xf9a0f668515Cf55393E728Cfd5c2a4b10b49d09E'
 const userID = localStorage.getItem('userID');
 const url = `http://127.0.0.1:5000/energy_account_api/get_energy_usage_data/${userID}`;
 const EnergyBillingABI = EnergyBillingABIget.abi
+
+const checkForProvider = () => {
+  if (window.ethereum) {
+    return new ethers.providers.Web3Provider(window.ethereum);
+  } else {
+    setErrorMessage('Ethereum wallet is not available. Please install MetaMask ');
+    return null;  // Return null to indicate the absence of a provider
+  }
+};
+
+const ConfirmationModal = ({ onClose, isProcessing }) => {
+  return (
+    <div style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 1000, 
+    }}>
+      <div style={{
+        backgroundColor: '#fff',
+        padding: '20px',
+        borderRadius: '5px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}>
+        {isProcessing ? (
+          <div className="spinner"></div>
+        ) : (
+          <>
+            <p>Please confirm the transaction in the MetaMask windows.</p>
+            <button onClick={onClose} style={{ marginTop: '10px' }}>Okay</button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+};
 
 useEffect(() => {
   fetch(url)
@@ -43,6 +89,8 @@ useEffect(() => {
 
 //logic to fetch user billing information
 const fetchBillingHistory = async (account) => {
+  const provider1 = checkForProvider();
+  if (!provider1) return;
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   const energyBillingContract = new ethers.Contract(energyContract, EnergyBillingABI, signer);
@@ -73,6 +121,8 @@ const fetchBillingHistory = async (account) => {
 };
 //Useeffect to update billing information after payment
 useEffect(() => {
+  const provider1 = checkForProvider();
+  if (!provider1) return;
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   const energyBillingContract = new ethers.Contract(energyContract, EnergyBillingABI, signer);
@@ -99,6 +149,8 @@ useEffect(() => {
 
 //Button to connect user's metamask wallet
 const ConnectButton = () => {
+  const provider = checkForProvider();
+  if (!provider) return;
   if (window.ethereum) {
     window.ethereum.request({ method: 'eth_requestAccounts' })
       .then(result => {
@@ -128,6 +180,7 @@ const ConnectButton = () => {
 const reportConsumptionAndPayBill = async () => {
   if (!window.ethereum) return alert("Please install MetaMask.");
 
+  setShowModal(true);
   const provider = new ethers.providers.Web3Provider(window.ethereum);
   const signer = provider.getSigner();
   const energyBillingContract = new ethers.Contract(energyContract, EnergyBillingABI, signer);
@@ -135,6 +188,7 @@ const reportConsumptionAndPayBill = async () => {
   try {
     const providerSelected = await selectProviderIfNeeded(energyBillingContract, signer);
     if (!providerSelected) {
+      setShowModal(false);
       alert('Provider selection failed. Please try again or contact support.');
       return;
     }
@@ -145,24 +199,24 @@ const reportConsumptionAndPayBill = async () => {
       offPeakConsumptionInWh
     );
     await reportTx.wait();
-
+    setIsProcessing(true);
     const billAmount = await energyBillingContract.calculateBill(await signer.getAddress());
-    const confirmPayment = window.confirm(`The bill amount is ${ethers.utils.formatEther(billAmount)} ETH. Do you want to proceed with payment?`);
-    if (!confirmPayment) {
-      return;
-    }
 
     const payTx = await energyBillingContract.payBill({ value: billAmount });
     const receipt = await payTx.wait();
     
     const updatedBalance = await provider.getBalance(defaultAccount);
     setUserBalance(ethers.utils.formatEther(updatedBalance));
-
+    setIsProcessing(false);
 
   } catch (error) {
     console.error(error);
     alert(`Failed to process your request. Error: ${error.message}`);
+  } finally {
+    setIsProcessing(false);
+    setShowModal(false); // Ensure modal is hidden after processing
   }
+  
 };
 
 //use this logic to send funds to selected provider account, may change 
@@ -181,6 +235,9 @@ const selectProviderIfNeeded = async (contract, signer) => {
     return false;
   }
 };
+
+//Spinner model for confirmation
+
 
 return (
   <div className="container-fluid">
@@ -223,11 +280,14 @@ return (
             <p><strong>Peak Consumption:</strong> {peakConsumption} kW</p>
             <p><strong>Mid-Peak Consumption:</strong> {midPeakConsumption} kW</p>
             <p><strong>Off-Peak Consumption:</strong> {offPeakConsumption} kW</p>
-            <button onClick={reportConsumptionAndPayBill} className="btn btn-success w-100">Report Consumption & Pay Bill</button>
+            <button onClick={reportConsumptionAndPayBill} className="btn btn-success w-100" disabled={isProcessing}>
+              {isProcessing ? 'Processing...' : 'Report Consumption & Pay Bill'}
+            </button>
           </div>
         </div>
       </div>
     </div>
+    {showModal && <ConfirmationModal onClose={() => setShowModal(false)} isProcessing={isProcessing} />}
   </div>
 );
 
