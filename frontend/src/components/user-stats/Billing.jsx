@@ -1,7 +1,9 @@
 import {ethers} from "ethers";
+import { Web3 } from 'web3';
 import { useEffect, useState } from "react";
 import networkMapping from "../../chain-info/deployments/map.json"
 import EnergyBillingABIget from '../../chain-info/contracts/EnergyBilling.json';
+import * as commands from './ContractCommands.js';
 
 
 const Billing = () => {
@@ -179,6 +181,7 @@ const ConnectButton = () => {
 //May remove payment window confirmation as metmask already asks for confirmation
 const reportConsumptionAndPayBill = async () => {
   if (!window.ethereum) return alert("Please install MetaMask.");
+  const web3 = new Web3(window.ethereum);
 
   setShowModal(true);
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -186,21 +189,25 @@ const reportConsumptionAndPayBill = async () => {
   const energyBillingContract = new ethers.Contract(energyContract, EnergyBillingABI, signer);
 
   try {
-    const providerSelected = await selectProviderIfNeeded(energyBillingContract, signer);
+    let abi = commands.getABI();
+    let contractBytecode = commands.getBytecode('EnergyBilling/bytecode2.txt');
+    let contractAddress = await commands.deployCommand(contractBytecode);
+
+    const providerSelected = await selectProviderIfNeeded(web3, signer, abi, contractAddress);
     if (!providerSelected) {
       setShowModal(false);
       alert('Provider selection failed. Please try again or contact support.');
       return;
     }
 
-    const reportTx = await energyBillingContract.reportConsumption(
-      peakConsumptionInWh,
-      midPeakConsumptionInWh,
-      offPeakConsumptionInWh
-    );
-    await reportTx.wait();
+    //reportConsumption
+    let reportConsumptionHash = commands.getFunctionHash("reportConsumption", [await signer.getAddress(), peakConsumptionInWh, midPeakConsumptionInWh, offPeakConsumptionInWh], web3, abi);
+    let reportConsumptionResponse = await commands.invokeSmartContract(contractAddress, reportConsumptionHash);
+
     setIsProcessing(true);
-    const billAmount = await energyBillingContract.calculateBill(await signer.getAddress());
+    let calculateBillHash = commands.getFunctionHash("calculateBill", [await signer.getAddress()], web3, abi);
+    let calculateBillResponse = await commands.querySmartContract(contractAddress, calculateBillHash);
+    let billAmount = parseInt(calculateBillResponse.StandardOutputContent.replace("\n", ""), 16);
 
     const payTx = await energyBillingContract.payBill({ value: billAmount });
     const receipt = await payTx.wait();
@@ -216,20 +223,24 @@ const reportConsumptionAndPayBill = async () => {
     setIsProcessing(false);
     setShowModal(false); // Ensure modal is hidden after processing
   }
-  
 };
 
 //use this logic to send funds to selected provider account, may change 
-const selectProviderIfNeeded = async (contract, signer) => {
+const selectProviderIfNeeded = async (web3, signer, abi, contractAddress) => {
   try {
     const userAddress = await signer.getAddress();
-    let userProvider = await contract.userToProvider(userAddress);
-    if (userProvider === ethers.constants.AddressZero) {
-      const tx = await contract.selectProvider(providerAddress, { from: userAddress });
-      await tx.wait();  
-      userProvider = await contract.userToProvider(userAddress);
+    let userToProviderHash = commands.getFunctionHash("userToProvider", [userAddress], web3, abi);
+    let userToProviderResponse = await commands.querySmartContract(contractAddress, userToProviderHash);
+    let userProvider = userToProviderResponse.StandardOutputContent.replace("\n", "");
+    if (parseInt(userProvider, 16) === 0) {
+      let selectProviderHash = commands.getFunctionHash("selectProvider", [userAddress, providerAddress], web3, abi);
+      let selectProviderResponse = await commands.invokeSmartContract(contractAddress, selectProviderHash);
+
+      let userToProviderHash = commands.getFunctionHash("userToProvider", [userAddress], web3, abi);
+      let userToProviderResponse = await commands.querySmartContract(contractAddress, userToProviderHash);
+      let userProvider = userToProviderResponse.StandardOutputContent.replace("\n", "");
     }
-    return userProvider !== ethers.constants.AddressZero;
+    return parseInt(userProvider, 16) !== 0
   } catch (error) {
     console.error('Error in selecting provider:', error);
     return false;
