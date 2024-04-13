@@ -58,7 +58,10 @@ const ConfirmationModal = ({ onClose, isProcessing }) => {
         alignItems: 'center',
       }}>
         {isProcessing ? (
+          <>
           <div className="spinner"></div>
+          <p>Processing Payment...</p>
+      </>
         ) : (
           <>
             <p>Please confirm the transaction in the MetaMask windows.</p>
